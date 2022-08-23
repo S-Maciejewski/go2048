@@ -24,27 +24,47 @@ func New() *board {
 }
 
 func (b *board) Print() {
+	fmt.Println("\n-----------------------------")
 	for i := 0; i < 4; i++ {
-		if i == 0 {
-			fmt.Println("-----------------")
-		}
 		fmt.Println("|", formatTile(b.board[i][0]), "|", formatTile(b.board[i][1]), "|",
 			formatTile(b.board[i][2]), "|", formatTile(b.board[i][3]), "|")
 		if i == 3 {
-			fmt.Println("-----------------")
 		}
 	}
+	fmt.Println("-----------------------------")
 }
-
-func (b *board) SpawnTile() {
-	b.populateTile(b.getRandomTile())
-}
-
 func (b *board) IsGameOver() bool {
 	return b.getAllFreeTiles() == nil
 }
 
-func (b *board) SumLeft() {
+func (b *board) ProcessMove(input string) {
+	oldBoard := b.board
+	switch input {
+	case "w":
+		b.sumUp()
+		break
+	case "a":
+		b.sumLeft()
+		break
+	case "s":
+		b.sumDown()
+		break
+	case "d":
+		b.sumRight()
+		break
+	}
+	if !b.isEqualTo(oldBoard) {
+		b.spawnTile()
+	} else {
+		fmt.Println("No changes made")
+	}
+}
+
+func (b *board) spawnTile() {
+	b.populateTile(b.getRandomTile())
+}
+
+func (b *board) sumLeft() {
 	for i := 0; i < 4; i++ {
 		if !isStuck(b.board[i]) {
 			b.board[i] = processRowLeft(b.board[i])
@@ -52,7 +72,7 @@ func (b *board) SumLeft() {
 	}
 }
 
-func (b *board) SumRight() {
+func (b *board) sumRight() {
 	for i := 0; i < 4; i++ {
 		row := [4]int{b.board[i][3], b.board[i][2], b.board[i][1], b.board[i][0]}
 		if !isStuck(row) {
@@ -64,7 +84,7 @@ func (b *board) SumRight() {
 	}
 }
 
-func (b *board) SumUp() {
+func (b *board) sumUp() {
 	for i := 0; i < 4; i++ {
 		column := [4]int{b.board[0][i], b.board[1][i], b.board[2][i], b.board[3][i]}
 		if !isStuck(column) {
@@ -76,7 +96,7 @@ func (b *board) SumUp() {
 	}
 }
 
-func (b *board) SumDown() {
+func (b *board) sumDown() {
 	for i := 0; i < 4; i++ {
 		column := [4]int{b.board[3][i], b.board[2][i], b.board[1][i], b.board[0][i]}
 		if !isStuck(column) {
@@ -88,11 +108,22 @@ func (b *board) SumDown() {
 	}
 }
 
+func (b *board) isEqualTo(other [4][4]int) bool {
+	for i := 0; i < 4; i++ {
+		for j := 0; j < 4; j++ {
+			if b.board[i][j] != other[i][j] {
+				return false
+			}
+		}
+	}
+	return true
+}
+
 func formatTile(i int) string {
 	if i == 0 {
-		return " "
+		return "    "
 	}
-	return fmt.Sprintf("%d", i)
+	return fmt.Sprintf("%4d", i)
 }
 
 func (b *board) getAllFreeTiles() []int {
@@ -146,7 +177,7 @@ func processRowLeft(row [4]int) [4]int {
 			row[0] != 0 && row[1] != 0 && row[2] != 0
 	}
 
-	// Sum adjacent tiles
+	// sum adjacent tiles
 	for j := 0; j < 3; j++ {
 		if row[j] == row[j+1] {
 			row[j] += row[j+1]

@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-// TODO: Spawn new tiles only after a valid move; count score; use a better display method (overwrite previous board)
+// TODO: Count score; use a better display method (overwrite previous board)
 
 func main() {
 	rand.Seed(int64(time.Now().Nanosecond()))
@@ -43,23 +43,7 @@ func main() {
 				panic(err)
 			}
 		}
-		fmt.Println(string(input), " read")
-		switch string(input) {
-		case "w":
-			b.SumUp()
-			break
-		case "a":
-			b.SumLeft()
-			break
-		case "s":
-			b.SumDown()
-			break
-		case "d":
-			b.SumRight()
-			break
-		}
-
-		b.SpawnTile()
+		b.ProcessMove(string(input))
 		b.Print()
 	}
 	fmt.Println("Game over!")
