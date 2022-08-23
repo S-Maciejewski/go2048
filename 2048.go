@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	tm "github.com/buger/goterm"
 	"go2048/board"
 	"golang.org/x/term"
 	"math/rand"
@@ -10,7 +12,7 @@ import (
 	"time"
 )
 
-// TODO: Count score; use a better display method (overwrite previous board)
+// TODO: Use a better display method, i.e. https://github.com/gizak/termui
 
 func main() {
 	rand.Seed(int64(time.Now().Nanosecond()))
@@ -25,6 +27,10 @@ func main() {
 			panic(err)
 		}
 	}(int(os.Stdin.Fd()), oldState)
+
+	tm.Clear()
+	tm.Flush()
+	tm.MoveCursor(1, 1)
 
 	// Initialize board
 	b := board.New()
@@ -47,4 +53,6 @@ func main() {
 		b.Print()
 	}
 	fmt.Println("Game over!")
+	reader := bufio.NewReader(os.Stdin)
+	_, _ = reader.ReadString('\n')
 }

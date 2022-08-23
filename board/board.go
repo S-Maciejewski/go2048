@@ -2,6 +2,7 @@ package board
 
 import (
 	"fmt"
+	tm "github.com/buger/goterm"
 	"math/rand"
 )
 
@@ -12,11 +13,13 @@ import (
 // 12 13 14 15
 type board struct {
 	board [4][4]int
+	score int
 }
 
 func New() *board {
 	// initialize random seed based on current time
 	b := &board{}
+	b.score = 0
 	for i := 0; i < 3; i++ {
 		b.populateTile(b.getRandomTile())
 	}
@@ -24,7 +27,13 @@ func New() *board {
 }
 
 func (b *board) Print() {
-	fmt.Println("\n-----------------------------")
+	// Clear the terminal screen
+	tm.Clear()
+	tm.Flush()
+	tm.MoveCursor(1, 1)
+
+	fmt.Println("\nScore: ", b.score)
+	fmt.Println("-----------------------------")
 	for i := 0; i < 4; i++ {
 		fmt.Println("|", formatTile(b.board[i][0]), "|", formatTile(b.board[i][1]), "|",
 			formatTile(b.board[i][2]), "|", formatTile(b.board[i][3]), "|")
@@ -55,8 +64,6 @@ func (b *board) ProcessMove(input string) {
 	}
 	if !b.isEqualTo(oldBoard) {
 		b.spawnTile()
-	} else {
-		fmt.Println("No changes made")
 	}
 }
 
@@ -67,7 +74,7 @@ func (b *board) spawnTile() {
 func (b *board) sumLeft() {
 	for i := 0; i < 4; i++ {
 		if !isStuck(b.board[i]) {
-			b.board[i] = processRowLeft(b.board[i])
+			b.board[i] = b.processRowLeft(b.board[i])
 		}
 	}
 }
@@ -76,7 +83,7 @@ func (b *board) sumRight() {
 	for i := 0; i < 4; i++ {
 		row := [4]int{b.board[i][3], b.board[i][2], b.board[i][1], b.board[i][0]}
 		if !isStuck(row) {
-			row = processRowLeft(row)
+			row = b.processRowLeft(row)
 			for j := 0; j < 4; j++ {
 				b.board[i][3-j] = row[j]
 			}
@@ -88,7 +95,7 @@ func (b *board) sumUp() {
 	for i := 0; i < 4; i++ {
 		column := [4]int{b.board[0][i], b.board[1][i], b.board[2][i], b.board[3][i]}
 		if !isStuck(column) {
-			column = processRowLeft(column)
+			column = b.processRowLeft(column)
 			for j := 0; j < 4; j++ {
 				b.board[j][i] = column[j]
 			}
@@ -100,7 +107,7 @@ func (b *board) sumDown() {
 	for i := 0; i < 4; i++ {
 		column := [4]int{b.board[3][i], b.board[2][i], b.board[1][i], b.board[0][i]}
 		if !isStuck(column) {
-			column = processRowLeft(column)
+			column = b.processRowLeft(column)
 			for j := 0; j < 4; j++ {
 				b.board[3-j][i] = column[j]
 			}
@@ -158,7 +165,7 @@ func isStuck(row [4]int) bool {
 	return row[0] == row[1] || row[1] == row[2] || row[2] == row[3]
 }
 
-func processRowLeft(row [4]int) [4]int {
+func (b *board) processRowLeft(row [4]int) [4]int {
 	// Compress excess zeros
 	noExcessZeros := false
 	for !noExcessZeros {
@@ -181,6 +188,7 @@ func processRowLeft(row [4]int) [4]int {
 	for j := 0; j < 3; j++ {
 		if row[j] == row[j+1] {
 			row[j] += row[j+1]
+			b.score += row[j]
 			row[j+1] = 0
 		}
 	}

@@ -61,7 +61,8 @@ func Test_processRowLeft(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := processRowLeft(tt.args.row); !reflect.DeepEqual(got, tt.want) {
+			b := &board{}
+			if got := b.processRowLeft(tt.args.row); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("processRowLeft() = %v, want %v", got, tt.want)
 			}
 		})
