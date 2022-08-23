@@ -118,7 +118,7 @@ func Test_board_SumRight(t *testing.T) {
 		want   [4][4]int
 	}{
 		{
-			name: "SumLeft",
+			name: "SumRight",
 			fields: fields{
 				board: [4][4]int{
 					{2, 0, 2, 0},
@@ -143,6 +143,86 @@ func Test_board_SumRight(t *testing.T) {
 			b.SumRight()
 			if !reflect.DeepEqual(b.board, tt.want) {
 				t.Errorf("board.SumRight() = %v, want %v", b.board, tt.want)
+			}
+		})
+	}
+}
+
+func Test_board_SumUp(t *testing.T) {
+	type fields struct {
+		board [4][4]int
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		want   [4][4]int
+	}{
+		{
+			name: "SumUp",
+			fields: fields{
+				board: [4][4]int{
+					{2, 0, 2, 2},
+					{2, 4, 2, 0},
+					{4, 2, 2, 0},
+					{2, 0, 0, 2},
+				},
+			},
+			want: [4][4]int{
+				{4, 4, 4, 4},
+				{4, 2, 2, 0},
+				{2, 0, 0, 0},
+				{0, 0, 0, 0},
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			b := &board{
+				board: tt.fields.board,
+			}
+			b.SumUp()
+			if !reflect.DeepEqual(b.board, tt.want) {
+				t.Errorf("board.SumUp() = %v, want %v", b.board, tt.want)
+			}
+		})
+	}
+}
+
+func Test_board_SumDown(t *testing.T) {
+	type fields struct {
+		board [4][4]int
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		want   [4][4]int
+	}{
+		{
+			name: "SumDown",
+			fields: fields{
+				board: [4][4]int{
+					{2, 0, 2, 2},
+					{2, 4, 2, 0},
+					{4, 2, 2, 0},
+					{2, 0, 0, 2},
+				},
+			},
+			want: [4][4]int{
+				{0, 0, 0, 0},
+				{4, 0, 0, 0},
+				{4, 4, 2, 0},
+				{2, 2, 4, 4},
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			b := &board{
+				board: tt.fields.board,
+			}
+			b.SumDown()
+			if !reflect.DeepEqual(b.board, tt.want) {
+				t.Errorf("board.SumDown() = %v, want %v", b.board, tt.want)
 			}
 		})
 	}

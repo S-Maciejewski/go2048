@@ -17,7 +17,7 @@ type board struct {
 func New() *board {
 	// initialize random seed based on current time
 	b := &board{}
-	for i := 0; i < 7; i++ {
+	for i := 0; i < 3; i++ {
 		b.populateTile(b.getRandomTile())
 	}
 	return b
@@ -32,6 +32,58 @@ func (b *board) Print() {
 			formatTile(b.board[i][2]), "|", formatTile(b.board[i][3]), "|")
 		if i == 3 {
 			fmt.Println("-----------------")
+		}
+	}
+}
+
+func (b *board) SpawnTile() {
+	b.populateTile(b.getRandomTile())
+}
+
+func (b *board) IsGameOver() bool {
+	return b.getAllFreeTiles() == nil
+}
+
+func (b *board) SumLeft() {
+	for i := 0; i < 4; i++ {
+		if !isStuck(b.board[i]) {
+			b.board[i] = processRowLeft(b.board[i])
+		}
+	}
+}
+
+func (b *board) SumRight() {
+	for i := 0; i < 4; i++ {
+		row := [4]int{b.board[i][3], b.board[i][2], b.board[i][1], b.board[i][0]}
+		if !isStuck(row) {
+			row = processRowLeft(row)
+			for j := 0; j < 4; j++ {
+				b.board[i][3-j] = row[j]
+			}
+		}
+	}
+}
+
+func (b *board) SumUp() {
+	for i := 0; i < 4; i++ {
+		column := [4]int{b.board[0][i], b.board[1][i], b.board[2][i], b.board[3][i]}
+		if !isStuck(column) {
+			column = processRowLeft(column)
+			for j := 0; j < 4; j++ {
+				b.board[j][i] = column[j]
+			}
+		}
+	}
+}
+
+func (b *board) SumDown() {
+	for i := 0; i < 4; i++ {
+		column := [4]int{b.board[3][i], b.board[2][i], b.board[1][i], b.board[0][i]}
+		if !isStuck(column) {
+			column = processRowLeft(column)
+			for j := 0; j < 4; j++ {
+				b.board[3-j][i] = column[j]
+			}
 		}
 	}
 }
@@ -64,33 +116,6 @@ func (b *board) populateTile(tileNumber int) {
 	i := tileNumber / 4
 	j := tileNumber % 4
 	b.board[i][j] = 2 + (rand.Intn(2) * 2)
-}
-
-func (b *board) IsGameOver() bool {
-	return b.getAllFreeTiles() == nil
-}
-
-func (b *board) SumLeft() {
-	for i := 0; i < 4; i++ {
-		if !isStuck(b.board[i]) {
-			b.board[i] = processRowLeft(b.board[i])
-		}
-	}
-}
-
-func (b *board) SumRight() {
-	for i := 0; i < 4; i++ {
-		if !isStuck(b.board[i]) {
-			// Reverse the row
-			row := [4]int{b.board[i][3], b.board[i][2], b.board[i][1], b.board[i][0]}
-			row = processRowLeft(row)
-			// Reverse the row again
-			for j, k := 0, len(row)-1; j < k; j, k = j+1, k-1 {
-				row[j], row[k] = row[k], row[j]
-			}
-			b.board[i] = row
-		}
-	}
 }
 
 func isStuck(row [4]int) bool {
