@@ -66,37 +66,24 @@ func (b *board) populateTile(tileNumber int) {
 	b.board[i][j] = 2 + (rand.Intn(2) * 2)
 }
 
-func (b *board) isFreeTile(i int, j int) bool {
-	return b.board[i][j] == 0
-}
-
-func isRowStuck(row [4]int) bool {
-	for j := 0; j < 4; j++ {
-		if row[j] != 0 {
-			return false
-		}
-	}
-	return row[0] == row[1] || row[1] == row[2] || row[2] == row[3]
-}
-
 func (b *board) IsGameOver() bool {
 	return b.getAllFreeTiles() == nil
 }
 
 func (b *board) SumLeft() {
 	for i := 0; i < 4; i++ {
-		if !isRowStuck(b.board[i]) {
-			b.board[i] = sumRowLeft(b.board[i])
+		if !isStuck(b.board[i]) {
+			b.board[i] = processRowLeft(b.board[i])
 		}
 	}
 }
 
 func (b *board) SumRight() {
 	for i := 0; i < 4; i++ {
-		if !isRowStuck(b.board[i]) {
+		if !isStuck(b.board[i]) {
 			// Reverse the row
 			row := [4]int{b.board[i][3], b.board[i][2], b.board[i][1], b.board[i][0]}
-			row = sumRowLeft(row)
+			row = processRowLeft(row)
 			// Reverse the row again
 			for j, k := 0, len(row)-1; j < k; j, k = j+1, k-1 {
 				row[j], row[k] = row[k], row[j]
@@ -106,7 +93,16 @@ func (b *board) SumRight() {
 	}
 }
 
-func sumRowLeft(row [4]int) [4]int {
+func isStuck(row [4]int) bool {
+	for j := 0; j < 4; j++ {
+		if row[j] != 0 {
+			return false
+		}
+	}
+	return row[0] == row[1] || row[1] == row[2] || row[2] == row[3]
+}
+
+func processRowLeft(row [4]int) [4]int {
 	// Compress excess zeros
 	noExcessZeros := false
 	for !noExcessZeros {
