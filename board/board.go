@@ -43,7 +43,19 @@ func (b *board) Print() {
 	fmt.Println("-----------------------------")
 }
 func (b *board) IsGameOver() bool {
-	return b.getAllFreeTiles() == nil
+	if b.getAllFreeTiles() == nil {
+		for i := 0; i < 4; i++ {
+			if !isStuck(b.board[i]) {
+				return false
+			}
+			column := [4]int{b.board[0][i], b.board[1][i], b.board[2][i], b.board[3][i]}
+			if !isStuck(column) {
+				return false
+			}
+		}
+		return true
+	}
+	return false
 }
 
 func (b *board) ProcessMove(input string) {
@@ -157,12 +169,12 @@ func (b *board) populateTile(tileNumber int) {
 }
 
 func isStuck(row [4]int) bool {
-	for j := 0; j < 4; j++ {
-		if row[j] != 0 {
+	for i := 0; i < 4; i++ {
+		if row[i] == 0 {
 			return false
 		}
 	}
-	return row[0] == row[1] || row[1] == row[2] || row[2] == row[3]
+	return !(row[0] == row[1] || row[1] == row[2] || row[2] == row[3])
 }
 
 func (b *board) processRowLeft(row [4]int) [4]int {

@@ -12,8 +12,7 @@ import (
 	"time"
 )
 
-// TODO: Use a better display method, i.e. https://github.com/gizak/termui
-
+// TODO: Use a better display method
 func main() {
 	rand.Seed(int64(time.Now().Nanosecond()))
 	// Setup reading form terminal without buffering

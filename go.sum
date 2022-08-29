@@ -1,5 +1,13 @@
 github.com/buger/goterm v1.0.4 h1:Z9YvGmOih81P0FbVtEYTFF6YsSgxSUKEhf/f9bTMXbY=
 github.com/buger/goterm v1.0.4/go.mod h1:HiFWV3xnkolgrBV3mY8m0X0Pumt4zg4QhbdOzQtB8tE=
+github.com/faiface/gui v0.0.0-20190522095505-ed00d80d15da h1:boFffA5Rv6WgwUWwWlHyk7qHfw1OkhZJJC91cCY4oBc=
+github.com/faiface/gui v0.0.0-20190522095505-ed00d80d15da/go.mod h1:FwTW4XT4ioo6pOkdNqVBycvSbZ881cVXVDLF8AA66uQ=
+github.com/faiface/mainthread v0.0.0-20171120011319-8b78f0a41ae3 h1:baVdMKlASEHrj19iqjARrPbaRisD7EuZEVJj6ZMLl1Q=
+github.com/faiface/mainthread v0.0.0-20171120011319-8b78f0a41ae3/go.mod h1:VEPNJUlxl5KdWjDvz6Q1l+rJlxF2i6xqDeGuGAxa87M=
+github.com/go-gl/gl v0.0.0-20211210172815-726fda9656d6 h1:zDw5v7qm4yH7N8C8uWd+8Ii9rROdgWxQuGoJ9WDXxfk=
+github.com/go-gl/gl v0.0.0-20211210172815-726fda9656d6/go.mod h1:9YTyiznxEY1fVinfM7RvRcjRHbw2xLBJ3AAGIT0I4Nw=
+github.com/go-gl/glfw v0.0.0-20220806181222-55e207c401ad h1:UTn6HRbV2fr8Rg1VVdST6kjjbjHrohfYzvqsXEpqBy8=
+github.com/go-gl/glfw v0.0.0-20220806181222-55e207c401ad/go.mod h1:wyvWpaEu9B/VQiV1jsPs7Mha9I7yto/HqIBw197ZAzk=
 golang.org/x/sys v0.0.0-20210331175145-43e1dd70ce54/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20210615035016-665e8c7367d1 h1:SrN+KX8Art/Sf4HNj6Zcz06G7VEz+7w9tdXTPOZ7+l4=
 golang.org/x/sys v0.0.0-20210615035016-665e8c7367d1/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
